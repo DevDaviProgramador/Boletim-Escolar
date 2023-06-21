@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Boletim Escolar</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    table th, table td {
+      border: solid 2px black;
+      padding: 10px;
+    }
+    tbody tr:nth-child(even) {
+      background-color: lightgray;
+    }
+    tbody tr:nth-child(odd) {
+      background-color: white;
+    }
+    tbody tr.reprovado {
+      background-color: #cc0909; /* Vermelho claro */
+    }
+    tbody tr.aprovado {
+      background-color: #0ec20e; /* Verde claro */
+    }
+    th:first-child {
+      border-top: none;
+      border-left: none;
+    }
+.Cabeçario {
+    background-color: yellow;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Boletim</h1>
+  </header>
+  <section>
+    <table>
+      <thead>
+        <tr >
+          <th></th>
+          <th class="Cabeçario">Nome</th>
+          <th class="Cabeçario">1º Semestre</th>
+          <th class="Cabeçario">2º Semestre</th>
+          <th class="Cabeçario">Nota Final</th>
+          <th class="Cabeçario">Frequência</th>
+        </tr>
+      </thead>
+      <tbody id="area-dos-alunos">
+      </tbody>
+    </table>
+  </section>
+
+  <script type="text/javascript">
+    var listaDeAlunos = [];
+
+    while (true) {
+      var aluno = {};
+
+      aluno['nome'] = prompt("Insira o nome do aluno " + (listaDeAlunos.length + 1));
+      aluno['n1'] = parseFloat(prompt("Insira a nota do primeiro semestre: "));
+      aluno['n2'] = parseFloat(prompt("Insira a nota do segundo semestre: "));
+      aluno['freq'] = parseFloat(prompt("Insira a frequência: "));
+      aluno['freq'] = Math.min(aluno['freq'], 100); // Limita a frequência a no máximo 100
+
+
+      // Limitando as notas a não passarem de 10
+      aluno['n1'] = Math.min(aluno['n1'], 10);
+      aluno['n2'] = Math.min(aluno['n2'], 10);
+
+      console.log("Dados informados: ");
+      console.log(aluno);
+
+      listaDeAlunos.push(aluno);
+
+      if (!confirm("Deseja informar mais um item?")) {
+        break;
+      }
+    }
+
+    var tabela = document.getElementById("area-dos-alunos");
+    var dados = "";
+
+    listaDeAlunos.forEach(function(aluno, index) {
+  var media = (aluno['n1'] + aluno['n2']) / 2;
+  var situacao = media >= 6 ? 'aprovado' : 'reprovado';
+  var nomeFormatado = aluno['nome'].charAt(0).toUpperCase() + aluno['nome'].slice(1).toLowerCase();
+  var frequenciaFormatada = aluno['freq'].toFixed(0) + "%"; // Formata a frequência sem casas decimais
+
+  dados += "<tr class='" + situacao + "'>";
+  dados += "<td>" + (index + 1) + "</td>";
+  dados += "<td>" + nomeFormatado + "</td>";
+  dados += "<td>" + aluno['n1'].toFixed(2) + "</td>";
+  dados += "<td>" + aluno['n2'].toFixed(2) + "</td>";
+  dados += "<td>" + media.toFixed(2) + "</td>";
+  dados += "<td>" + frequenciaFormatada + "</td>";
+  dados += "</tr>";
+});
+
+    tabela.innerHTML += dados;
+  </script>
+</body>
+</html>
